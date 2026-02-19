@@ -1,0 +1,40 @@
+# macOS / OS metadata
+.DS_Store
+Thumbs.db
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build / packaging artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Tool caches and reports
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+
+# Editor / IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local generated outputs
+/sample_output*.html
+/samples/*_output.html
