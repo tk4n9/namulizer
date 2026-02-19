@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>{{ page_title }} - 나무위키</title>
+  <style>
+    :root {
+      --espejo-page-font-size-var: 15px;
+      --espejo-page-font-family-var: "Pretendard JP", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", "NanumBarunGothic", Roboto, "Segoe UI", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif, emoji;
+      --espejo-page-font-weight-var: 400;
+      --espejo-layout-gutter-var: 1rem;
+      --espejo-card-gutter-var: 1.25rem;
+      --espejo-content-gutter-var: 1rem;
+      --espejo-card-border-width-var: 1px;
+      --espejo-card-border-radius-var: 6px;
+      --espejo-article-min-height-var: 50rem;
+      --espejo-article-gutter-left-var: 1.5rem;
+      --espejo-article-gutter-right-var: 1.5rem;
+      --espejo-article-gutter-y-var: 1.5rem;
+      --espejo-article-title-gutter-bottom-var: 1.5rem;
+      --espejo-article-wiki-title-gutter-bottom-var: 1.5rem;
+      --espejo-background-color: #f5f5f5;
+      --espejo-text-color: #212529;
+      --espejo-text-secondary-color: rgba(33, 37, 41, 0.749);
+      --espejo-text-tertiary-color: rgba(33, 37, 41, 0.502);
+      --espejo-link-color: #0275d8;
+      --espejo-link-hover-color: #0263b8;
+      --espejo-link-external-color: #377e21;
+      --espejo-brand1-color: #00a69c;
+      --espejo-brand2-color: #28b472;
+      --espejo-brand-bright1-color: #bfe9d5;
+      --espejo-brand-bright2-color: #d4f0e3;
+      --espejo-card-background-color: #fff;
+      --espejo-card-border-color: #ccc;
+      --espejo-component-background-color: #fff;
+      --espejo-component-background-focus-color: #f2f2f2;
+      --espejo-component-border-color: #ced4da;
+      --espejo-component-border-focus-color: #878a8d;
+      --espejo-button-background-color: #fff;
+      --espejo-button-background-hover-color: #efefef;
+      --espejo-button-border-color: #dadada;
+      --espejo-button-border-hover-color: #c5c5c5;
+      --espejo-article-menu-background-color: #fff;
+      --espejo-article-title-namespace-underline-color: inset 0 -0.5rem 0 #d4f0e3;
+      --espejo-nav-bar-background-color: linear-gradient(90deg, #00a69c, #00a69c, #28b472);
+      --espejo-nav-bar-text-color: #fff;
+      --espejo-nav-bar-item-hover-color: hsla(0, 0%, 100%, 0.1);
+      --espejo-nav-bar-border-color: #ccc;
+    }
+
+    body.theseed-dark-mode {
+      --espejo-background-color: #000;
+      --espejo-text-color: #e0e0e0;
+      --espejo-text-secondary-color: hsla(0, 0%, 88%, 0.749);
+      --espejo-text-tertiary-color: hsla(0, 0%, 88%, 0.502);
+      --espejo-link-color: #ec9f19;
+      --espejo-link-hover-color: #bd7f14;
+      --espejo-link-external-color: #377e21;
+      --espejo-brand1-color: #2e3033;
+      --espejo-brand2-color: #2e3033;
+      --espejo-brand-bright1-color: #c0c1c2;
+      --espejo-brand-bright2-color: #c0c1c2;
+      --espejo-card-background-color: #1c1d1f;
+      --espejo-card-border-color: #444;
+      --espejo-component-background-color: #000;
+      --espejo-component-background-focus-color: #262626;
+      --espejo-component-border-color: #444;
+      --espejo-component-border-focus-color: #888;
+      --espejo-button-background-color: #000;
+      --espejo-button-background-hover-color: #1e1e1e;
+      --espejo-button-border-color: #454545;
+      --espejo-button-border-hover-color: #545454;
+      --espejo-article-menu-background-color: #000;
+      --espejo-article-title-namespace-underline-color: inset 0 -0.5rem 0 #3d3f42;
+      --espejo-nav-bar-background-color: linear-gradient(90deg, #2e3033, #2e3033, #2e3033);
+      --espejo-nav-bar-text-color: #fff;
+      --espejo-nav-bar-item-hover-color: hsla(0, 0%, 100%, 0.08);
+      --espejo-nav-bar-border-color: #3f444a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      --brand-color-1: var(--espejo-brand1-color);
+      --brand-color-2: var(--espejo-brand2-color);
+      --brand-bright-color-1: var(--espejo-brand-bright1-color);
+      --brand-bright-color-2: var(--espejo-brand-bright2-color);
+      --text-color: var(--espejo-text-color);
+      --text-secondary-color: var(--espejo-text-secondary-color);
+      --link-color: var(--espejo-link-color);
+      --article-background-color: var(--espejo-card-background-color);
+      margin: 0;
+      background-color: var(--espejo-background-color);
+      color: var(--espejo-text-color);
+      font-display: swap;
+      font-family: var(--espejo-page-font-family-var);
+      font-size: var(--espejo-page-font-size-var);
+      font-weight: var(--espejo-page-font-weight-var);
+      line-height: 1.5;
+      min-width: 240px;
+    }
+
+    a {
+      color: var(--espejo-link-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--espejo-link-hover-color);
+      text-decoration: underline;
+    }
+
+    .namu-root {
+      --espejo-container-max-width: none;
+      margin: 0 auto;
+      max-width: var(--espejo-container-max-width);
+      padding-left: var(--espejo-layout-gutter-var);
+      padding-right: var(--espejo-layout-gutter-var);
+      width: 100%;
+    }
+
+    .namu-topbar {
+      background: var(--espejo-nav-bar-background-color);
+      border-bottom: 1px solid var(--espejo-nav-bar-border-color);
+      color: var(--espejo-nav-bar-text-color);
+      height: 3.5rem;
+      width: 100%;
+    }
+
+    .namu-topbar-inner {
+      --espejo-container-max-width: none;
+      align-items: center;
+      display: flex;
+      gap: 0.5rem;
+      height: 100%;
+      margin: 0 auto;
+      max-width: var(--espejo-container-max-width);
+      padding-left: max(env(safe-area-inset-left, 0), 1rem);
+      padding-right: max(env(safe-area-inset-right, 0), 1rem);
+    }
+
+    @media screen and (min-width: 1200px) {
+      .namu-topbar-inner {
+        --espejo-container-max-width: 1280px;
+      }
+    }
+
+    @media screen and (min-width: 1400px) {
+      .namu-topbar-inner {
+        --espejo-container-max-width: 1400px;
+      }
+    }
+
+    .namu-topbar-brand {
+      align-items: center;
+      border-radius: 4px;
+      color: var(--espejo-nav-bar-text-color);
+      display: inline-flex;
+      font-size: 1.15rem;
+      font-weight: 700;
+      height: 2.5rem;
+      padding: 0 0.75rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .namu-topbar-brand:hover {
+      background-color: var(--espejo-nav-bar-item-hover-color);
+      color: var(--espejo-nav-bar-text-color);
+      text-decoration: none;
+    }
+
+    .namu-topbar-nav {
+      align-items: center;
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .namu-topbar-item {
+      align-items: center;
+      border-radius: 4px;
+      color: var(--espejo-nav-bar-text-color);
+      display: inline-flex;
+      font-size: 1rem;
+      font-weight: 500;
+      height: 2.5rem;
+      padding: 0 0.75rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .namu-topbar-item:hover {
+      background-color: var(--espejo-nav-bar-item-hover-color);
+      color: var(--espejo-nav-bar-text-color);
+      text-decoration: none;
+    }
+
+    .namu-topbar-search {
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.96);
+      border-radius: 4px;
+      display: flex;
+      height: 2.5rem;
+      margin-left: auto;
+      max-width: 24rem;
+      min-width: 16rem;
+      padding: 0 0.75rem;
+    }
+
+    .namu-topbar-search svg {
+      color: #5f6368;
+      flex: 0 0 auto;
+      height: 0.95rem;
+      margin-right: 0.5rem;
+      width: 0.95rem;
+    }
+
+    .namu-topbar-search input {
+      background: transparent;
+      border: 0;
+      color: #212529;
+      flex: 1;
+      font: inherit;
+      min-width: 0;
+      outline: none;
+    }
+
+    body.theseed-dark-mode .namu-topbar-search {
+      background-color: #f5f5f5;
+    }
+
+    @media screen and (min-width: 1200px) {
+      .namu-root {
+        --espejo-container-max-width: 1280px;
+      }
+    }
+
+    @media screen and (min-width: 1400px) {
+      .namu-root {
+        --espejo-container-max-width: 1400px;
+      }
+    }
+
+    .namu-main {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: var(--espejo-layout-gutter-var);
+      min-width: 0;
+      padding-top: var(--espejo-layout-gutter-var);
+      padding-bottom: var(--espejo-layout-gutter-var);
+    }
+
+    .namu-article {
+      background-color: var(--espejo-card-background-color);
+      border: var(--espejo-card-border-width-var) solid var(--espejo-card-border-color);
+      border-radius: var(--espejo-card-border-radius-var);
+      margin: 0;
+      min-height: var(--espejo-article-min-height-var);
+      padding: var(--espejo-article-gutter-y-var) var(--espejo-article-gutter-right-var) var(--espejo-article-gutter-y-var) var(--espejo-article-gutter-left-var);
+      transition: background-color 0.05s ease-in, border-color 0.05s ease-in;
+      word-break: break-all;
+    }
+
+    .namu-title-row {
+      display: flex;
+      margin: 0 0 var(--espejo-article-title-gutter-bottom-var) 0;
+    }
+
+    .namu-title-wrap {
+      margin: 0 0 var(--espejo-article-wiki-title-gutter-bottom-var) 0;
+    }
+
+    .namu-title-box {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .q0SIIMea {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1;
+      margin: 0;
+      word-break: break-all;
+    }
+
+    .xq1cHspW {
+      color: var(--espejo-text-color);
+      transition: color 0.05s ease-in;
+    }
+
+    .yHlm7zVX {
+      color: var(--espejo-text-secondary-color);
+      font-size: 0.9rem;
+      margin: 0.5rem 0 0;
+      transition: color 0.05s ease-in;
+    }
+
+    .namu-divider {
+      border: 0;
+      border-top: 1px solid #ccc;
+      box-sizing: content-box;
+      height: 0;
+      margin: 0.5em 0 1em;
+    }
+
+    body.theseed-dark-mode .namu-divider {
+      border-top-color: #383b40;
+    }
+
+    .wiki-body {
+      overflow: hidden;
+    }
+
+    .wiki-body p {
+      margin-top: 0;
+    }
+
+    .wiki-body ol,
+    .wiki-body ul {
+      margin: 0.4em 0 0.4em 1.5em;
+      padding-left: 0.5rem;
+    }
+
+    .wiki-body li {
+      margin: 0.4em 0;
+    }
+
+    .wiki-body .wiki-paragraph {
+      margin-bottom: 1rem;
+    }
+
+    .wiki-body .wiki-heading {
+      border-bottom: 1px solid #ccc;
+      cursor: pointer;
+      margin: 1.2em 0 0.8em;
+      padding-bottom: 5px;
+    }
+
+    .wiki-body .wiki-heading.level-1 {
+      font-size: 1.8em;
+    }
+
+    .wiki-body .wiki-heading.level-2 {
+      font-size: 1.6em;
+    }
+
+    .wiki-body .wiki-heading.level-3 {
+      font-size: 1.4em;
+    }
+
+    .wiki-body .wiki-heading::before {
+      color: #666;
+      content: "▾";
+      display: inline-block;
+      font-size: 0.8em;
+      font-weight: 400;
+      line-height: 1.8em;
+      margin: 0 0.5rem 0 0.2rem;
+      text-align: center;
+      vertical-align: baseline;
+      width: 0.9em;
+    }
+
+    .wiki-body .wiki-heading.wiki-heading-folded {
+      opacity: 0.5;
+    }
+
+    .wiki-body .wiki-heading.wiki-heading-folded::before {
+      content: "▸";
+    }
+
+    body.theseed-dark-mode .wiki-body .wiki-heading {
+      border-bottom-color: #383b40;
+    }
+
+    .wiki-body .wiki-heading-content.wiki-heading-content-folded {
+      display: none;
+    }
+
+    .wiki-body .wiki-section-link {
+      font-weight: 700;
+      margin-right: 0.25rem;
+    }
+
+    .wiki-body .wiki-heading-text {
+      color: var(--espejo-text-color);
+    }
+
+    .wiki-body .wiki-edit-section {
+      float: right;
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+      user-select: none;
+    }
+
+    .wiki-body .wiki-macro-toc {
+      border: 1px solid #ccc;
+      display: inline-block;
+      margin-left: 5px;
+      margin-bottom: 1rem;
+      padding: 12px 20px 12px 0;
+    }
+
+    body.theseed-dark-mode .wiki-body .wiki-macro-toc {
+      border-color: #383b40;
+    }
+
+    .wiki-body .wiki-macro-toc details summary {
+      cursor: pointer;
+      font-size: 1.25em;
+      list-style: none;
+      margin-left: 14px;
+      min-width: 60px;
+      position: relative;
+      background-position: 100%;
+      background-repeat: no-repeat;
+      background-size: auto 14px;
+      padding-right: 18px;
+    }
+
+    .wiki-body .wiki-macro-toc details summary::marker {
+      content: "";
+      display: none;
+    }
+
+    .wiki-body .wiki-macro-toc details summary::before {
+      content: "목차";
+    }
+
+    .wiki-body .wiki-macro-toc details summary::after {
+      color: #666;
+      content: "▸";
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .wiki-body .wiki-macro-toc details[open] {
+      padding-bottom: 4px;
+    }
+
+    .wiki-body .wiki-macro-toc details[open] summary {
+      margin-bottom: 12px;
+    }
+
+    .wiki-body .wiki-macro-toc details[open] summary::after {
+      content: "▾";
+    }
+
+    .wiki-body .toc-indent {
+      padding-left: 20px;
+    }
+
+    .wiki-body .toc-item {
+      display: block;
+    }
+
+    .wiki-body .toc-item.toc-level-2 {
+      padding-left: 20px;
+    }
+
+    .wiki-body .toc-item.toc-level-3 {
+      padding-left: 40px;
+    }
+
+    .wiki-body .wiki-table-wrap {
+      display: block;
+      margin: 10px 0;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .wiki-body .wiki-table {
+      background-color: #f5f5f5;
+      border-collapse: collapse;
+    }
+
+    .wiki-body .wiki-table td,
+    .wiki-body .wiki-table th {
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+    }
+
+    body.theseed-dark-mode .wiki-body .wiki-table {
+      background-color: #2d2f34;
+    }
+
+    body.theseed-dark-mode .wiki-body .wiki-table td,
+    body.theseed-dark-mode .wiki-body .wiki-table th {
+      border-color: #383b40;
+    }
+
+    .wiki-body img {
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .wiki-body .wiki-image {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .wiki-body .wiki-image-wrapper {
+      display: inline-block;
+      font-size: 0;
+      max-width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .wiki-body .wiki-image-align-center {
+      display: block;
+      font-size: 0;
+      max-width: 100%;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .wiki-body .wiki-caption {
+      color: var(--espejo-text-secondary-color);
+      font-size: 0.88rem;
+      margin-top: 0.4rem;
+      text-align: center;
+    }
+
+    .wiki-body code {
+      background-color: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 2px;
+    }
+
+    .wiki-body pre {
+      background-color: #eee;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      overflow-x: auto;
+      padding: 7px;
+    }
+
+    .wiki-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    body.theseed-dark-mode .wiki-body pre {
+      background-color: #2d2f34;
+      border-color: #383b40;
+      color: #ddd;
+    }
+
+    .wiki-body .wiki-fn-content {
+      font-size: 0.8em;
+      vertical-align: super;
+      white-space: nowrap;
+    }
+
+    .wiki-body .wiki-fn-content + .wiki-fn-content {
+      margin-left: 1px;
+    }
+
+    .wiki-body .wiki-macro-footnote {
+      border-top: 1px solid #777;
+      margin: 1.5em 0;
+      padding: 0.5em 0;
+    }
+
+    body.theseed-dark-mode .wiki-body .wiki-macro-footnote {
+      border-top-color: #383840;
+    }
+
+    .wiki-body .footnote-list {
+      display: block;
+      line-height: 1.75;
+      margin-bottom: 0.5em;
+      word-break: break-all;
+    }
+
+    .wiki-body .wiki-reference-block {
+      margin-top: 1.25rem;
+    }
+
+    .wiki-body .wiki-reference-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+    }
+
+    .wiki-body .wiki-footnote-ref {
+      cursor: pointer;
+    }
+
+    .wiki-body .popper {
+      display: block;
+      left: 0;
+      max-width: min(640px, calc(100vw - 16px));
+      outline: none;
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      visibility: hidden;
+      width: max-content;
+      z-index: 10000;
+    }
+
+    .wiki-body .popper.show {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .wiki-body .popper .popper-inner {
+      background: #f5f5f5;
+      border: 1px solid #c7c7c7;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      color: var(--espejo-text-color);
+      font-size: 0.98rem;
+      line-height: 1.75;
+      max-width: min(640px, calc(100vw - 16px));
+      padding: 1.25rem 1.6rem;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .wiki-body .popper .popper-inner a {
+      color: var(--espejo-link-color);
+    }
+
+    .wiki-body .popper .popper-inner .wiki-footnote-popup-index {
+      font-weight: 700;
+      margin-right: 0.35rem;
+    }
+
+    body.theseed-dark-mode .wiki-body .popper .popper-inner {
+      background: #383b40;
+      border-color: #545962;
+      box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+      color: #e0e0e0;
+    }
+
+    @media screen and (max-width: 1023.98px) {
+      :root {
+        --espejo-layout-gutter-var: 0;
+        --espejo-content-gutter-var: 0;
+        --espejo-card-gutter-var: 1rem;
+        --espejo-article-gutter-left-var: calc(env(safe-area-inset-left, 0) + 1rem);
+        --espejo-article-gutter-right-var: calc(env(safe-area-inset-right, 0) + 1rem);
+        --espejo-article-gutter-y-var: 1rem;
+        --espejo-article-title-gutter-bottom-var: 1.25rem;
+        --espejo-article-wiki-title-gutter-bottom-var: 1rem;
+      }
+
+      .namu-main {
+        padding-top: 0;
+      }
+
+      .namu-topbar {
+        height: 3rem;
+      }
+
+      .namu-topbar-brand {
+        font-size: 1rem;
+        height: 2rem;
+        padding: 0 0.6rem;
+      }
+
+      .namu-topbar-item {
+        font-size: 0.92rem;
+        height: 2rem;
+        padding: 0 0.55rem;
+      }
+
+      .namu-topbar-search {
+        height: 2rem;
+        max-width: 14rem;
+        min-width: 8rem;
+        padding: 0 0.5rem;
+      }
+
+      .namu-article {
+        border-left: 0;
+        border-radius: 0;
+        border-right: 0;
+      }
+
+      .q0SIIMea {
+        font-size: 2rem;
+      }
+    }
+
+    @media screen and (max-width: 319.98px) {
+      :root {
+        --espejo-page-font-size-var: 14px;
+        --espejo-article-gutter-left-var: calc(env(safe-area-inset-left, 0) + 0.75rem);
+        --espejo-article-gutter-right-var: calc(env(safe-area-inset-right, 0) + 0.75rem);
+      }
+
+      .q0SIIMea {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+  <body class="{% if dark_mode %}theseed-dark-mode{% else %}theseed-light-mode{% endif %}" data-enable-fold="{% if enable_fold %}1{% else %}0{% endif %}">
+  <div id="app">
+    <header class="namu-topbar" role="banner" aria-label="NamuWiki Header">
+      <div class="namu-topbar-inner">
+        <a href="#" class="namu-topbar-brand">나무위키</a>
+        <nav class="namu-topbar-nav" aria-label="Primary">
+          <a href="#" class="namu-topbar-item">최근 변경</a>
+          <a href="#" class="namu-topbar-item">최근 토론</a>
+          <a href="#" class="namu-topbar-item">특수 기능</a>
+        </nav>
+        <label class="namu-topbar-search" aria-label="Search">
+          <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zm-208 144a144 144 0 1 0 0-288a144 144 0 1 0 0 288z"/></svg>
+          <input type="search" placeholder="여기에서 검색" />
+        </label>
+      </div>
+    </header>
+    <div class="namu-root">
+      <div class="namu-main">
+        <article class="namu-article">
+          <div class="namu-title-row namu-title-wrap">
+            <div class="namu-title-box">
+              <h1 class="q0SIIMea"><a href="#" class="xq1cHspW"><span>{{ page_title }}</span></a></h1>
+              <div class="yHlm7zVX">최근 수정 시각: <time datetime="{{ modified_datetime }}">{{ modified_text }}</time></div>
+              {% if authors %}
+              <div class="yHlm7zVX">저자: {{ authors|join(', ') }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <hr class="namu-divider" />
+
+          <div class="wiki-body">
+            {% if abstract %}
+            <div class="wiki-paragraph"><strong>Abstract.</strong> {{ abstract }}</div>
+            {% endif %}
+
+            {% if toc_items %}
+            <div class="wiki-macro-toc" id="toc">
+              <details open>
+                <summary></summary>
+                <div class="toc-indent">
+                  {% for item in toc_items %}
+                  <span class="toc-item toc-level-{{ item.level }}"><a href="#{{ item.anchor }}">{{ item.number }}</a>. {{ item.title }}</span>
+                  {% endfor %}
+                </div>
+              </details>
+            </div>
+            {% endif %}
+
+            {% for section in sections %}
+            <section class="wiki-section" id="{{ section.anchor }}">
+              <h{{ section.heading_tag }} class="wiki-heading level-{{ section.level }}" data-anchor="{{ section.anchor }}">
+                <a href="#toc" class="wiki-section-link">{{ section.number }}.</a>
+                <span class="wiki-heading-text">{{ section.title }}</span>
+                {% if enable_fold %}
+                <a href="#" class="wiki-edit-section wiki-section-fold-toggle" data-target="{{ section.anchor }}" aria-expanded="true">[접기]</a>
+                {% endif %}
+              </h{{ section.heading_tag }}>
+              <div class="wiki-heading-content" id="{{ section.anchor }}-content">{{ section.html | safe }}</div>
+            </section>
+            {% endfor %}
+
+            {% if footnotes %}
+            <div class="wiki-macro-footnote" id="fn-list">
+              {% for fn in footnotes %}
+              <span class="footnote-list" id="fn-{{ fn.id }}"><a href="#fnref-{{ fn.id }}">[{{ fn.id }}]</a> {{ fn.html | safe }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if references %}
+            <div class="wiki-macro-footnote wiki-reference-block" id="ref-list">
+              <div class="wiki-reference-title">참고문헌</div>
+              {% for ref in references %}
+              <span class="footnote-list" id="ref-{{ loop.index }}">[{{ loop.index }}] {{ ref.text }}{% if ref.url %} (<a href="{{ ref.url }}">link</a>){% endif %}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="popper" id="wiki-footnote-popper" role="tooltip" aria-hidden="true">
+              <div class="popper-inner"></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const allowFold = document.body.dataset.enableFold === "1";
+
+      function toggleSection(anchor) {
+        const heading = document.querySelector(`.wiki-heading[data-anchor='${anchor}']`);
+        const content = document.getElementById(`${anchor}-content`);
+        const button = document.querySelector(`.wiki-section-fold-toggle[data-target='${anchor}']`);
+        if (!heading || !content) return;
+
+        const folded = heading.classList.toggle("wiki-heading-folded");
+        content.classList.toggle("wiki-heading-content-folded", folded);
+        if (button) {
+          button.textContent = folded ? "[펼치기]" : "[접기]";
+          button.setAttribute("aria-expanded", folded ? "false" : "true");
+        }
+      }
+
+      if (allowFold) {
+        document.querySelectorAll(".wiki-section-fold-toggle").forEach((toggle) => {
+          toggle.addEventListener("click", (event) => {
+            event.preventDefault();
+            const anchor = toggle.getAttribute("data-target");
+            if (anchor) toggleSection(anchor);
+          });
+        });
+      }
+
+      const popper = document.getElementById("wiki-footnote-popper");
+      const popperInner = popper ? popper.querySelector(".popper-inner") : null;
+      let hideTimer = null;
+      let activeRef = null;
+
+      function clearHideTimer() {
+        if (hideTimer) {
+          clearTimeout(hideTimer);
+          hideTimer = null;
+        }
+      }
+
+      function scheduleHide(delay = 160) {
+        clearHideTimer();
+        hideTimer = window.setTimeout(hidePopper, delay);
+      }
+
+      function hidePopper() {
+        if (!popper) return;
+        popper.classList.remove("show");
+        popper.setAttribute("aria-hidden", "true");
+        activeRef = null;
+      }
+
+      function positionPopper(target) {
+        if (!popper) return;
+        const rect = target.getBoundingClientRect();
+        const spacing = 8;
+        const popWidth = popper.offsetWidth;
+        const popHeight = popper.offsetHeight;
+        const maxLeft = Math.max(spacing, window.innerWidth - popWidth - spacing);
+
+        let left = rect.left - 6;
+        if (left > maxLeft) {
+          left = rect.right - popWidth + 6;
+        }
+        left = Math.max(spacing, Math.min(maxLeft, left));
+
+        let top = rect.bottom + spacing;
+        const maxTop = Math.max(spacing, window.innerHeight - popHeight - spacing);
+        if (top > maxTop) {
+          top = rect.top - popHeight - spacing;
+        }
+        top = Math.max(spacing, Math.min(maxTop, top));
+
+        popper.style.left = `${left}px`;
+        popper.style.top = `${top}px`;
+      }
+
+      function renderFootnotePopupHtml(ref) {
+        const footnoteId = (ref.getAttribute("data-footnote-id") || "").trim();
+        if (!/^\d+$/.test(footnoteId)) return "";
+
+        const footnoteLine = document.getElementById(`fn-${footnoteId}`);
+        if (!footnoteLine) return "";
+
+        const clone = footnoteLine.cloneNode(true);
+        clone.removeAttribute("id");
+        const backref = clone.querySelector("a");
+        if (backref && backref.textContent && backref.textContent.trim() === `[${footnoteId}]`) {
+          backref.setAttribute("href", `#fn-${footnoteId}`);
+          backref.classList.add("wiki-footnote-popup-index");
+        }
+        return clone.innerHTML;
+      }
+
+      function showPopper(target) {
+        if (!popper || !popperInner) return;
+
+        const htmlText = renderFootnotePopupHtml(target);
+        if (!htmlText) return;
+
+        clearHideTimer();
+        popperInner.innerHTML = htmlText;
+        popper.classList.add("show");
+        popper.setAttribute("aria-hidden", "false");
+        activeRef = target;
+        positionPopper(target);
+      }
+
+      document.querySelectorAll(".wiki-footnote-ref").forEach((ref) => {
+        ref.addEventListener("mouseenter", () => {
+          showPopper(ref);
+        });
+
+        ref.addEventListener("mouseleave", () => {
+          scheduleHide();
+        });
+
+        ref.addEventListener("focus", () => {
+          showPopper(ref);
+        });
+
+        ref.addEventListener("blur", () => {
+          scheduleHide(0);
+        });
+      });
+
+      if (popper) {
+        popper.addEventListener("mouseenter", clearHideTimer);
+        popper.addEventListener("mouseleave", () => {
+          scheduleHide();
+        });
+      }
+
+      window.addEventListener("scroll", () => {
+        if (!popper || !popper.classList.contains("show")) return;
+        if (!activeRef || !activeRef.isConnected) {
+          hidePopper();
+          return;
+        }
+        positionPopper(activeRef);
+      }, { passive: true });
+
+      window.addEventListener("resize", () => {
+        if (!popper || !popper.classList.contains("show")) return;
+        if (!activeRef || !activeRef.isConnected) {
+          hidePopper();
+          return;
+        }
+        positionPopper(activeRef);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") hidePopper();
+      });
+
+      document.addEventListener("pointerdown", (event) => {
+        if (!popper || !popper.classList.contains("show")) return;
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        if (popper.contains(target)) return;
+        if (target.closest(".wiki-footnote-ref")) return;
+        hidePopper();
+      });
+    })();
+  </script>
+</body>
+</html>
