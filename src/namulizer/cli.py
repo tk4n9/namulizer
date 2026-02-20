@@ -58,10 +58,11 @@ def _select_parser(input_path: Path, *, embed_images: bool):
     lowered = input_path.name.lower()
     if lowered.endswith(".pdf"):
         return PDFParser(embed_images=embed_images)
-    if lowered.endswith(".zip") or lowered.endswith(".tex"):
+    _TEX_EXTENSIONS = (".tex", ".zip", ".tar.gz", ".tgz", ".tar.bz2", ".tar.xz", ".tar", ".gz")
+    if any(lowered.endswith(ext) for ext in _TEX_EXTENSIONS):
         return TeXParser(embed_images=embed_images)
     raise click.ClickException(
-        f"Unsupported input type: {input_path.name} (expected .pdf, .tex, or .zip containing TeX source)"
+        f"Unsupported input type: {input_path.name} (expected .pdf, .tex, .zip, or .tar.gz containing TeX source)"
     )
 
 

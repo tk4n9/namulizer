@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import base64
+import gzip
 import mimetypes
 import re
+import tarfile
 import tempfile
 from pathlib import Path
 from zipfile import ZipFile
@@ -18,10 +20,12 @@ _SECTION_LEVELS = {
 }
 
 _MATH_ENVS = ("equation", "align", "gather", "multline")
+_MATH_ENVS_STARRED = tuple(f"{e}*" for e in _MATH_ENVS)
+_ALL_MATH_ENVS = _MATH_ENVS + _MATH_ENVS_STARRED
 
 
 class TeXParser:
-    """Parse TeX input (single .tex or zip of TeX source tree)."""
+    """Parse TeX input (single .tex, zip, tar.gz, or gz of TeX source tree)."""
 
     def __init__(self, embed_images: bool = True) -> None:
         self.embed_images = embed_images
@@ -39,6 +43,25 @@ class TeXParser:
                 with ZipFile(input_path) as zf:
                     zf.extractall(tmp_path)
                 return self._parse_tex_tree(tmp_path)
+
+        if _is_tar_archive(input_path):
+            with tempfile.TemporaryDirectory(prefix="namulizer_tex_") as tmp:
+                tmp_path = Path(tmp)
+                with tarfile.open(input_path, "r:*") as tf:
+                    tf.extractall(tmp_path, filter="data")
+                return self._parse_tex_tree(tmp_path)
+
+        if input_path.suffix.lower() == ".gz" and not _is_tar_archive(input_path):
+            # Single gzipped .tex file (common arXiv format).
+            with tempfile.TemporaryDirectory(prefix="namulizer_tex_") as tmp:
+                tmp_path = Path(tmp)
+                stem = input_path.stem  # e.g. "paper.tex" from "paper.tex.gz"
+                if not stem.endswith(".tex"):
+                    stem = stem + ".tex"
+                out_file = tmp_path / stem
+                with gzip.open(input_path, "rb") as gz:
+                    out_file.write_bytes(gz.read())
+                return self._parse_tex_file(out_file)
 
         if input_path.suffix.lower() == ".tex":
             return self._parse_tex_file(input_path)
@@ -73,6 +96,7 @@ class TeXParser:
     def _parse_tex_file(self, tex_path: Path) -> Paper:
         raw = tex_path.read_text(encoding="utf-8", errors="ignore")
         text = _strip_comments(raw)
+        text = _resolve_inputs(text, tex_path.parent)
 
         title = _clean_inline_tex(_extract_command_value(text, "title") or tex_path.stem)
         authors_raw = _extract_command_value(text, "author") or ""
@@ -135,7 +159,7 @@ class TeXParser:
         while i < len(text):
             hits: list[tuple[int, str]] = []
 
-            for env in ("figure", "table", *_MATH_ENVS):
+            for env in ("figure*", "figure", "table*", "table", *_ALL_MATH_ENVS):
                 token = f"\\begin{{{env}}}"
                 pos = text.find(token, i)
                 if pos != -1:
@@ -155,19 +179,19 @@ class TeXParser:
             if next_pos > i:
                 blocks.extend(self._parse_paragraphs(text[i:next_pos]))
 
-            if kind == "figure":
-                env_text, end = _extract_environment(text, "figure", next_pos)
+            if kind in ("figure", "figure*"):
+                env_text, end = _extract_environment(text, kind, next_pos)
                 blocks.append(self._parse_figure(env_text, asset_root))
                 i = end
                 continue
 
-            if kind == "table":
-                env_text, end = _extract_environment(text, "table", next_pos)
+            if kind in ("table", "table*"):
+                env_text, end = _extract_environment(text, kind, next_pos)
                 blocks.append(self._parse_table(env_text))
                 i = end
                 continue
 
-            if kind in _MATH_ENVS:
+            if kind in _ALL_MATH_ENVS:
                 env_text, end = _extract_environment(text, kind, next_pos)
                 blocks.append(EquationBlock(latex=_clean_math_block(env_text), display=True))
                 i = end
@@ -277,6 +301,46 @@ class TeXParser:
         return refs
 
 
+def _is_tar_archive(path: Path) -> bool:
+    """Check if the file is a tar archive (.tar, .tar.gz, .tgz, .tar.bz2)."""
+    name = path.name.lower()
+    if name.endswith((".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tar.xz")):
+        return True
+    # A .gz file that is actually a tar (common for arXiv e-print downloads).
+    if name.endswith(".gz") and tarfile.is_tarfile(str(path)):
+        return True
+    return False
+
+
+def _resolve_inputs(text: str, base_dir: Path, _seen: set[Path] | None = None) -> str:
+    r"""Resolve \input{} and \include{} commands by inlining file contents.
+
+    Handles the common arXiv pattern of multi-file TeX projects.  Guards
+    against infinite recursion via the *_seen* set.
+    """
+    if _seen is None:
+        _seen = set()
+
+    def _replace(match: re.Match[str]) -> str:
+        rel_path = match.group(1).strip()
+        # LaTeX allows omitting .tex extension.
+        candidates = [
+            base_dir / rel_path,
+            base_dir / (rel_path + ".tex"),
+        ]
+        for candidate in candidates:
+            resolved = candidate.resolve()
+            if resolved.is_file() and resolved not in _seen:
+                _seen.add(resolved)
+                child_text = resolved.read_text(encoding="utf-8", errors="ignore")
+                child_text = _strip_comments(child_text)
+                return _resolve_inputs(child_text, resolved.parent, _seen)
+        # File not found — leave the command in place (will be cleaned later).
+        return match.group(0)
+
+    return re.sub(r"\\(?:input|include)\{([^{}]+)\}", _replace, text)
+
+
 def _strip_comments(text: str) -> str:
     lines = []
     for line in text.splitlines():
@@ -312,7 +376,8 @@ def _extract_environment(text: str, env: str, start: int) -> tuple[str, int]:
 
 
 def _extract_environment_body(text: str, env: str) -> str | None:
-    match = re.search(rf"\\begin\{{{env}\}}(.*?)\\end\{{{env}\}}", text, flags=re.DOTALL)
+    escaped = re.escape(env)
+    match = re.search(rf"\\begin\{{{escaped}\}}(.*?)\\end\{{{escaped}\}}", text, flags=re.DOTALL)
     return match.group(1) if match else None
 
 
