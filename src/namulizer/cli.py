@@ -6,6 +6,7 @@ from pathlib import Path
 
 import click
 
+from namulizer.parser.md_parser import MarkdownParser
 from namulizer.parser.pdf_parser import PDFParser
 from namulizer.parser.tex_parser import TeXParser
 from namulizer.renderer.html_renderer import HTMLRenderer
@@ -58,10 +59,14 @@ def _select_parser(input_path: Path, *, embed_images: bool):
     lowered = input_path.name.lower()
     if lowered.endswith(".pdf"):
         return PDFParser(embed_images=embed_images)
-    if lowered.endswith(".zip") or lowered.endswith(".tex"):
+    if lowered.endswith((".md", ".markdown")):
+        return MarkdownParser(embed_images=embed_images)
+    _TEX_EXTENSIONS = (".tex", ".zip", ".tar.gz", ".tgz", ".tar.bz2", ".tar.xz", ".tar", ".gz")
+    if any(lowered.endswith(ext) for ext in _TEX_EXTENSIONS):
         return TeXParser(embed_images=embed_images)
     raise click.ClickException(
-        f"Unsupported input type: {input_path.name} (expected .pdf, .tex, or .zip containing TeX source)"
+        f"Unsupported input type: {input_path.name} "
+        "(expected .pdf, .md, .tex, .zip, or .tar.gz containing TeX source)"
     )
 
 
