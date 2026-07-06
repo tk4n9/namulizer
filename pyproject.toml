@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "namulizer"
-version = "0.1.0"
-description = "Convert academic papers into self-contained NamuWiki-style HTML"
+version = "0.3.0"
+description = "Convert academic papers (PDF/Markdown) into self-contained NamuWiki-style HTML"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
   { name = "namulizer contributors" }
@@ -15,17 +15,18 @@ authors = [
 dependencies = [
   "click>=8.1",
   "jinja2>=3.1",
-  "pymupdf>=1.23",
-  "Pillow>=10.0"
+  "markdown-it-py>=3.0",
+  "mdit-py-plugins>=0.4",
+  "linkify-it-py>=2.0",
+  "pymupdf4llm>=0.0.17",
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0"
 ]
-llm = [
-  "anthropic",
-  "openai"
+markitdown = [
+  "markitdown[pdf]>=0.1"
 ]
 
 [project.scripts]
@@ -38,7 +39,7 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-"namulizer.template" = ["namuwiki.html"]
+"namulizer" = ["template/namuwiki.html"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

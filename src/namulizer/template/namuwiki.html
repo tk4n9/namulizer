@@ -743,8 +743,8 @@
           <hr class="namu-divider" />
 
           <div class="wiki-body">
-            {% if abstract %}
-            <div class="wiki-paragraph"><strong>Abstract.</strong> {{ abstract }}</div>
+            {% if abstract_html %}
+            <div class="wiki-abstract">{{ abstract_html | safe }}</div>
             {% endif %}
 
             {% if toc_items %}
@@ -785,7 +785,7 @@
             <div class="wiki-macro-footnote wiki-reference-block" id="ref-list">
               <div class="wiki-reference-title">참고문헌</div>
               {% for ref in references %}
-              <span class="footnote-list" id="ref-{{ loop.index }}">[{{ loop.index }}] {{ ref.text }}{% if ref.url %} (<a href="{{ ref.url }}">link</a>){% endif %}</span>
+              <span class="footnote-list" id="ref-{{ ref.id }}">[{{ ref.id }}] {{ ref.html | safe }}</span>
               {% endfor %}
             </div>
             {% endif %}

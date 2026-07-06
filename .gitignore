@@ -38,3 +38,7 @@ htmlcov/
 # Local generated outputs
 /sample_output*.html
 /samples/*_output.html
+
+# Local agent/tool state
+.claude/
+.omc/
